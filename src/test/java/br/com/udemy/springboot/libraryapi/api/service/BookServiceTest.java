@@ -3,6 +3,8 @@ package br.com.udemy.springboot.libraryapi.api.service;
 import br.com.udemy.springboot.libraryapi.api.model.repository.BookRepository;
 import br.com.udemy.springboot.libraryapi.api.service.impl.BookServiceImpl;
 import br.com.udemy.springboot.libraryapi.api.model.entity.Book;
+import br.com.udemy.springboot.libraryapi.exceptions.BusinessException;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 /**
  * @author macrusal on 26/04/20
@@ -36,12 +39,9 @@ public class BookServiceTest {
     @DisplayName("Deve salvar um livro")
     public void saveBookTest() {
         //cenario
-        Book book = Book.builder()
-                .isbn("01234560")
-                .autor("Paulo Coelho")
-                .title("O Livro do Paulo Coelho")
-                .build();
-        Mockito.when(repository.save(book)).thenReturn(
+        Book book = createValidBook();
+        when(repository.existsByIsbn(Mockito.anyString())).thenReturn(false);
+        when(repository.save(book)).thenReturn(
                 Book.builder()
                     .id(1L)
                     .isbn("01234560")
@@ -60,4 +60,30 @@ public class BookServiceTest {
 
     }
 
+    private Book createValidBook() {
+        return Book.builder()
+                .isbn("01234560")
+                .autor("Paulo Coelho")
+                .title("O Livro do Paulo Coelho")
+                .build();
+    }
+
+    @Test
+    @DisplayName("Deve lancar erro de negocio ao tentar salvar um livro com isbn duplicado")
+    public void shouldNotSaveABookWithDuplicatedISBN() {
+        //cenario
+        Book book = createValidBook();
+        when(repository.existsByIsbn(Mockito.anyString())).thenReturn(true);
+        String mensagemErro = "Isbn já cadastrado.";
+
+        //execucao
+        Throwable exception = Assertions.catchThrowable(() -> service.save(book));
+
+        //validacao
+        assertThat(exception)
+                .isInstanceOf(BusinessException.class)
+                .hasMessage(mensagemErro);
+
+        verify(repository, never()).save(book);
+    }
 }
