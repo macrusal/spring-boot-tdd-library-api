@@ -3,6 +3,7 @@ package br.com.udemy.springboot.libraryapi.api.resource;
 import br.com.udemy.springboot.libraryapi.api.dto.BookDTO;
 import br.com.udemy.springboot.libraryapi.model.entity.Book;
 import br.com.udemy.springboot.libraryapi.service.BookService;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,28 +17,20 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
 
     private BookService bookService;
+    private ModelMapper modelMapper;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, ModelMapper mapper) {
         this.bookService = bookService;
+        this.modelMapper = mapper;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookDTO create(@RequestBody BookDTO dto) {
 
-        Book bookEntity = Book.builder()
-                .autor(dto.getAutor())
-                .title(dto.getTitle())
-                .isbn(dto.getIsbn())
-                .build();
+        Book bookEntity = modelMapper.map(dto, Book.class);
         bookEntity = bookService.save(bookEntity);
-
-        BookDTO bookDTO = BookDTO.builder()
-                .id(bookEntity.id)
-                .autor(bookEntity.getAutor())
-                .title(bookEntity.getTitle())
-                .isbn(bookEntity.getIsbn())
-                .build();
+        BookDTO bookDTO = modelMapper.map(bookEntity, BookDTO.class);
 
         return bookDTO;
     }
