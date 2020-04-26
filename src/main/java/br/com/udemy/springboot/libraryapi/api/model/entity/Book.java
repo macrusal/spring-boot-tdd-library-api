@@ -1,4 +1,4 @@
-package br.com.udemy.springboot.libraryapi.model.entity;
+package br.com.udemy.springboot.libraryapi.api.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

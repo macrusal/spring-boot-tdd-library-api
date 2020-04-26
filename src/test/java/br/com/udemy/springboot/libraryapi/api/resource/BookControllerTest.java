@@ -1,8 +1,8 @@
 package br.com.udemy.springboot.libraryapi.api.resource;
 
 import br.com.udemy.springboot.libraryapi.api.dto.BookDTO;
-import br.com.udemy.springboot.libraryapi.model.entity.Book;
-import br.com.udemy.springboot.libraryapi.service.BookService;
+import br.com.udemy.springboot.libraryapi.api.model.entity.Book;
+import br.com.udemy.springboot.libraryapi.api.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

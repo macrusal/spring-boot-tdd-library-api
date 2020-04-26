@@ -1,11 +1,14 @@
 package br.com.udemy.springboot.libraryapi.api.service;
 
-import br.com.udemy.springboot.libraryapi.model.entity.Book;
-import br.com.udemy.springboot.libraryapi.service.BookService;
-import org.junit.jupiter.api.Assertions;
+import br.com.udemy.springboot.libraryapi.api.model.repository.BookRepository;
+import br.com.udemy.springboot.libraryapi.api.service.impl.BookServiceImpl;
+import br.com.udemy.springboot.libraryapi.api.model.entity.Book;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -21,8 +24,16 @@ public class BookServiceTest {
 
     BookService service;
 
+    @MockBean
+    BookRepository repository;
+
+    @BeforeEach
+    public void setUp() {
+        this.service = new BookServiceImpl( repository );
+    }
+
     @Test
-    @DisplayName("Deve salvat um livro")
+    @DisplayName("Deve salvar um livro")
     public void saveBookTest() {
         //cenario
         Book book = Book.builder()
@@ -30,6 +41,13 @@ public class BookServiceTest {
                 .autor("Paulo Coelho")
                 .title("O Livro do Paulo Coelho")
                 .build();
+        Mockito.when(repository.save(book)).thenReturn(
+                Book.builder()
+                    .id(1L)
+                    .isbn("01234560")
+                    .autor("Paulo Coelho")
+                    .title("O Livro do Paulo Coelho")
+                    .build());
 
         //execucao
         Book savedBook = service.save(book);

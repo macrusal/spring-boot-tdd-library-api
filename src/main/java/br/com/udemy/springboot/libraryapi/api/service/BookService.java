@@ -1,6 +1,6 @@
-package br.com.udemy.springboot.libraryapi.service;
+package br.com.udemy.springboot.libraryapi.api.service;
 
-import br.com.udemy.springboot.libraryapi.model.entity.Book;
+import br.com.udemy.springboot.libraryapi.api.model.entity.Book;
 
 /**
  * @author macrusal on 26/04/20
