@@ -1,5 +1,6 @@
 package br.com.udemy.springboot.libraryapi.api.repository;
 
+import br.com.udemy.springboot.libraryapi.api.model.entity.Book;
 import br.com.udemy.springboot.libraryapi.api.model.repository.BookRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +33,12 @@ public class BookRepositoryTest {
 
         //cenario
         String isbn = "01234560";
+        Book book = Book.builder()
+                .autor("Autor desconhecido")
+                .title("O Livro dos Segredos")
+                .isbn(isbn)
+                .build();
+        entityManager.persist(book);
 
         //execucao
         boolean existsByIsbn = repository.existsByIsbn(isbn);
