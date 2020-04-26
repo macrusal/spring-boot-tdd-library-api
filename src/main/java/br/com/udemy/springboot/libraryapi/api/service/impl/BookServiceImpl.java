@@ -6,6 +6,8 @@ import br.com.udemy.springboot.libraryapi.api.service.BookService;
 import br.com.udemy.springboot.libraryapi.exceptions.BusinessException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * @author macrusal on 26/04/20
  * @project library-api
@@ -25,5 +27,10 @@ public class BookServiceImpl implements BookService {
             throw new BusinessException("Isbn já cadastrado.");
         }
         return repository.save(book);
+    }
+
+    @Override
+    public Optional<Book> getById(Long id) {
+        return Optional.empty();
     }
 }
