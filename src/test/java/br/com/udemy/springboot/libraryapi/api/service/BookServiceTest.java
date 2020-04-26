@@ -59,4 +59,10 @@ public class BookServiceTest {
         assertThat(savedBook.getTitle()).isEqualTo("O Livro do Paulo Coelho");
 
     }
+
+    @Test
+    @DisplayName("Deve lancar erro quando nao houver dados suficiente para criacao do livro")
+    void createInvalidBookTest() {
+
+    }
 }
