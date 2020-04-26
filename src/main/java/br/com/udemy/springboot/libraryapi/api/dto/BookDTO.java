@@ -1,7 +1,6 @@
 package br.com.udemy.springboot.libraryapi.api.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * @author macrusal on 25/04/20
@@ -9,6 +8,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookDTO {
 
     public Long id;

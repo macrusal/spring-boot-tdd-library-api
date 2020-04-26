@@ -1,5 +1,6 @@
 package br.com.udemy.springboot.libraryapi.api.resource;
 
+import br.com.udemy.springboot.libraryapi.api.dto.BookDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,13 @@ public class BookControllerTest {
     @Test
     @DisplayName("Deve criar um livro com sucesso")
     public void createBookTest() throws Exception {
-        String json = new ObjectMapper().writeValueAsString(null);
+        BookDTO dto = BookDTO.builder()
+                .autor("Autor desconhecido")
+                .title("O Livro dos Segredos")
+                .isbn("01234560")
+                .build();
+
+        String json = new ObjectMapper().writeValueAsString(dto);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .post(BOOK_API)
@@ -47,9 +54,9 @@ public class BookControllerTest {
             .perform(request)
             .andExpect(status().isCreated())
             .andExpect(jsonPath("id").isNotEmpty())
-            .andExpect(jsonPath("title").value("Meu Livro"))
-            .andExpect(jsonPath("autor").value("Autor"))
-            .andExpect(jsonPath("isbn").value("123456"));
+            .andExpect(jsonPath("title").value(dto.getTitle()))
+            .andExpect(jsonPath("autor").value(dto.getAutor()))
+            .andExpect(jsonPath("isbn").value(dto.getIsbn()));
     }
 
     @Test
