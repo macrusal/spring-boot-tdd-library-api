@@ -4,6 +4,7 @@ import br.com.udemy.springboot.libraryapi.api.dto.BookDTO;
 import br.com.udemy.springboot.libraryapi.api.exceptions.ApiErrors;
 import br.com.udemy.springboot.libraryapi.api.model.entity.Book;
 import br.com.udemy.springboot.libraryapi.api.service.BookService;
+import br.com.udemy.springboot.libraryapi.exceptions.BusinessException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -45,5 +46,11 @@ public class BookController {
     public ApiErrors handleValidationExceptions(MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
         return new ApiErrors(bindingResult);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrors handleBusinnesExceptions(BusinessException exception) {
+        return new ApiErrors(exception);
     }
 }

@@ -60,9 +60,4 @@ public class BookServiceTest {
 
     }
 
-    @Test
-    @DisplayName("Deve lancar erro quando nao houver dados suficiente para criacao do livro")
-    void createInvalidBookTest() {
-
-    }
 }
