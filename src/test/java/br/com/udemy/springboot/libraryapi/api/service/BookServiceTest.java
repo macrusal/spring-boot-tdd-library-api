@@ -91,7 +91,7 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Deve obter um livro por Id")
-    void getBookById() {
+    public void getBookById() {
 
         //cenario
         Long id = 1L;
@@ -112,7 +112,7 @@ public class BookServiceTest {
 
     @Test
     @DisplayName("Deve retornar vazio ao buscar um livro por Id que nao existe na base")
-    void bookNotFoundByIdTest() {
+    public void bookNotFoundByIdTest() {
 
         //cenario
         Long id = 1L;
@@ -124,4 +124,34 @@ public class BookServiceTest {
         //validacao
         assertThat( book.isPresent() ).isFalse();
     }
+
+    @Test
+    @DisplayName("Deve deletar um livro")
+    public void deleteBookTest() {
+        //cenario
+        Long id = 1L;
+        Book book = createValidBook();
+        book.setId(id);
+
+        //execucao
+        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> service.delete(book));
+
+        //validacao
+        Mockito.verify(repository, Mockito.times(1)).delete(book);
+    }
+
+
+    @Test
+    @DisplayName("Deve lancar exceção ao tentar deletar um livro sem id")
+    public void deleteInvalidBookTest() {
+        //cenario
+        Book book = new Book();
+
+        //execucao
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> service.delete(book));
+
+        //validacao
+        Mockito.verify(repository, Mockito.never()).delete(book);
+    }
+
 }
