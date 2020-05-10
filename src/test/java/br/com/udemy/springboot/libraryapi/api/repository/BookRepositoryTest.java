@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
 /**
  * @author macrusal on 26/04/20
  * @project library-api
@@ -33,11 +35,7 @@ public class BookRepositoryTest {
 
         //cenario
         String isbn = "01234560";
-        Book book = Book.builder()
-                .autor("Autor desconhecido")
-                .title("O Livro dos Segredos")
-                .isbn(isbn)
-                .build();
+        Book book = createNewBook(isbn);
         entityManager.persist(book);
 
         //execucao
@@ -45,6 +43,14 @@ public class BookRepositoryTest {
 
         //verificacao
         Assertions.assertThat(existsByIsbn).isTrue();
+    }
+
+    private Book createNewBook(String isbn) {
+        return Book.builder()
+                .autor("Autor desconhecido")
+                .title("O Livro dos Segredos")
+                .isbn(isbn)
+                .build();
     }
 
     @Test
@@ -59,5 +65,22 @@ public class BookRepositoryTest {
 
         //verificacao
         Assertions.assertThat(existsByIsbn).isFalse();
+    }
+
+    @Test
+    @DisplayName("Deve obter um livro por id")
+    public void findByIdTest() {
+
+        //cenario
+        String isbn = "01234560";
+        Book book = createNewBook(isbn);
+        entityManager.persist(book);
+
+        //execucao
+        Optional<Book> foundBook = repository.findById(book.getId());
+
+        //verificacao
+        Assertions.assertThat(foundBook.isPresent()).isTrue();
+
     }
 }
