@@ -104,7 +104,7 @@ public class BookServiceTest {
 
         //validacao
         assertThat( foundBook.isPresent() ).isTrue();
-        assertThat( foundBook.get().getId() ).isEqualTo(book.getAutor());
+        assertThat( foundBook.get().getId() ).isEqualTo(book.getId());
         assertThat( foundBook.get().getAutor() ).isEqualTo(book.getAutor());
         assertThat( foundBook.get().getIsbn() ).isEqualTo(book.getIsbn());
         assertThat( foundBook.get().getTitle() ).isEqualTo(book.getTitle());
@@ -140,7 +140,6 @@ public class BookServiceTest {
         Mockito.verify(repository, Mockito.times(1)).delete(book);
     }
 
-
     @Test
     @DisplayName("Deve lancar exceção ao tentar deletar um livro sem id")
     public void deleteInvalidBookTest() {
@@ -152,6 +151,41 @@ public class BookServiceTest {
 
         //validacao
         Mockito.verify(repository, Mockito.never()).delete(book);
+    }
+
+    @Test
+    @DisplayName("Deve atualizar um livro")
+    public void updateBookTest() {
+        //cenario
+        Book updatingBook = Book.builder().id(1L).build();
+
+        Book updatedBook = createValidBook();
+        updatedBook.setId(1L);
+        Mockito.when(repository.save(updatingBook)).thenReturn(updatedBook);
+
+        //execucao
+        Book  book = service.save(updatingBook);
+        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> service.update(book));
+
+        //validacao
+        Mockito.verify(repository, Mockito.times(1)).save(book);
+        assertThat(book.getId()).isEqualTo(updatedBook.getId());
+        assertThat(book.getAutor()).isEqualTo(updatedBook.getAutor());
+        assertThat(book.getIsbn()).isEqualTo(updatedBook.getIsbn());
+        assertThat(book.getTitle()).isEqualTo(updatedBook.getTitle());
+    }
+
+    @Test
+    @DisplayName("Deve lancar exceção ao tentar atualizar um livro sem id")
+    public void updateInvalidBookTest() {
+        //cenario
+        Book book = new Book();
+
+        //execucao
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> service.update(book));
+
+        //validacao
+        Mockito.verify(repository, Mockito.never()).save(book);
     }
 
 }
