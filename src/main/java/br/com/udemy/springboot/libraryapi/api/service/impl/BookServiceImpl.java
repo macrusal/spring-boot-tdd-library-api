@@ -4,6 +4,10 @@ import br.com.udemy.springboot.libraryapi.api.model.repository.BookRepository;
 import br.com.udemy.springboot.libraryapi.api.model.entity.Book;
 import br.com.udemy.springboot.libraryapi.api.service.BookService;
 import br.com.udemy.springboot.libraryapi.exceptions.BusinessException;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -48,5 +52,18 @@ public class BookServiceImpl implements BookService {
             throw new IllegalArgumentException("Book Id can't be null");
         }
         return this.repository.save(book);
+    }
+
+    @Override
+    public Page find(Book filter, Pageable pageRequest) {
+
+        Example<Book> example = Example.of(filter,
+                ExampleMatcher
+                        .matching()
+                        .withIgnoreCase()
+                        .withIgnoreNullValues()
+                        .withStringMatcher( ExampleMatcher.StringMatcher.CONTAINING )
+        );
+        return repository.findAll(example, pageRequest);
     }
 }

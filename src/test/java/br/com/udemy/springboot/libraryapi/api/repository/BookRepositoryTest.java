@@ -3,6 +3,7 @@ package br.com.udemy.springboot.libraryapi.api.repository;
 import br.com.udemy.springboot.libraryapi.api.model.entity.Book;
 import br.com.udemy.springboot.libraryapi.api.model.repository.BookRepository;
 import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +43,7 @@ public class BookRepositoryTest {
         boolean existsByIsbn = repository.existsByIsbn(isbn);
 
         //verificacao
-        Assertions.assertThat(existsByIsbn).isTrue();
+        assertThat(existsByIsbn).isTrue();
     }
 
     private Book createNewBook(String isbn) {
@@ -64,7 +65,7 @@ public class BookRepositoryTest {
         boolean existsByIsbn = repository.existsByIsbn(isbn);
 
         //verificacao
-        Assertions.assertThat(existsByIsbn).isFalse();
+        assertThat(existsByIsbn).isFalse();
     }
 
     @Test
@@ -80,7 +81,41 @@ public class BookRepositoryTest {
         Optional<Book> foundBook = repository.findById(book.getId());
 
         //verificacao
-        Assertions.assertThat(foundBook.isPresent()).isTrue();
+        assertThat(foundBook.isPresent()).isTrue();
 
     }
+
+    @Test
+    @DisplayName("Deve salvar um livro")
+    public void saveBookTest() {
+
+        //cenario
+        String isbn = "01234560";
+        Book book = createNewBook(isbn);
+
+        Book savedBook = repository.save(book);
+
+        assertThat(savedBook.getId()).isNotNull();
+
+    }
+
+
+    @Test
+    @DisplayName("Deve salvar um livro")
+    public void deleteBookTest() {
+
+        //cenario
+        String isbn = "01234560";
+        Book book = createNewBook(isbn);
+        entityManager.persist(book);
+
+        Book foundBook = entityManager.find(Book.class, book.getId());
+
+        repository.delete(foundBook);
+
+        Book deletedBook = entityManager.find(Book.class, book.getId());
+
+        assertThat(deletedBook).isNull();
+    }
+
 }
