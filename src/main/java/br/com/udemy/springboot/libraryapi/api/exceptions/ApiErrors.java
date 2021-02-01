@@ -2,6 +2,7 @@ package br.com.udemy.springboot.libraryapi.api.exceptions;
 
 import br.com.udemy.springboot.libraryapi.exceptions.BusinessException;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +24,9 @@ public class ApiErrors {
         this.errors = Arrays.asList(exception.getMessage());
     }
 
+    public ApiErrors(ResponseStatusException exception) {
+        this.errors = Arrays.asList(exception.getReason());
+    }
     /**
      * Gets errors
      *
