@@ -3,6 +3,7 @@ package br.com.udemy.springboot.libraryapi.api.service.impl;
 import br.com.udemy.springboot.libraryapi.api.model.entity.Loan;
 import br.com.udemy.springboot.libraryapi.api.model.repository.LoanRepository;
 import br.com.udemy.springboot.libraryapi.api.service.LoanService;
+import br.com.udemy.springboot.libraryapi.exceptions.BusinessException;
 
 /**
  * @author macrusal on 01/02/21
@@ -18,6 +19,9 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public Loan save(Loan loan) {
+        if(repository.existsByBookAndNotReturned(loan.getBook())) {
+            throw new BusinessException("Book already loaned");
+        }
         return repository.save(loan);
     }
 }

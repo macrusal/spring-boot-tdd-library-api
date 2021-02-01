@@ -1,5 +1,6 @@
 package br.com.udemy.springboot.libraryapi.api.model.repository;
 
+import br.com.udemy.springboot.libraryapi.api.model.entity.Book;
 import br.com.udemy.springboot.libraryapi.api.model.entity.Loan;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @project library-api
  */
 public interface LoanRepository extends JpaRepository<Loan,Long> {
+    boolean existsByBookAndNotReturned(Book book);
 }
