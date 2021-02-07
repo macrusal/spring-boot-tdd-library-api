@@ -46,14 +46,6 @@ public class BookRepositoryTest {
         assertThat(existsByIsbn).isTrue();
     }
 
-    private Book createNewBook(String isbn) {
-        return Book.builder()
-                .autor("Autor desconhecido")
-                .title("O Livro dos Segredos")
-                .isbn(isbn)
-                .build();
-    }
-
     @Test
     @DisplayName("Deve retornar falso quando não existir um livro na base com o isbn informado")
     public void returnFalseWhenIsbnDoesntExists() {
@@ -118,4 +110,11 @@ public class BookRepositoryTest {
         assertThat(deletedBook).isNull();
     }
 
+    private Book createNewBook(String isbn) {
+        return Book.builder()
+                .autor("Autor desconhecido")
+                .title("O Livro dos Segredos")
+                .isbn(isbn)
+                .build();
+    }
 }
