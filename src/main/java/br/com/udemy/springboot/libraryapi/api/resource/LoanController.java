@@ -1,12 +1,15 @@
 package br.com.udemy.springboot.libraryapi.api.resource;
 
 import br.com.udemy.springboot.libraryapi.api.dto.LoandDTO;
+import br.com.udemy.springboot.libraryapi.api.dto.ReturnedLoanDTO;
 import br.com.udemy.springboot.libraryapi.api.model.entity.Book;
 import br.com.udemy.springboot.libraryapi.api.model.entity.Loan;
 import br.com.udemy.springboot.libraryapi.api.service.BookService;
 import br.com.udemy.springboot.libraryapi.api.service.LoanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,4 +50,13 @@ public class LoanController {
         return entity.getId();
     }
 
+
+    @PatchMapping("{id}")
+    public void returnBook(@PathVariable Long id,
+                           @RequestBody ReturnedLoanDTO dto) {
+
+        Loan loan =  loanService.getById(id).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        loan.setReturned(dto.isReturned());
+        loanService.update(loan);
+    }
 }
